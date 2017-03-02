@@ -5,6 +5,8 @@
 
   <property name="classes" location="classes" />
   <property name="src" location="src" />
+  <property name="package" value="pt.ist.ap.labs" />
+  <property name="mainClass" value="Main" />
 
   <target name="init">
     <!-- create the classes dir -->
@@ -20,8 +22,7 @@
   </target>
 
   <target name="run" depends="compile">
-
-    <java classpath="${src}" classname="pt.ist.ap.labs.Main" />
+    <java classpath="${src}" classname="${package}.${mainClass}" />
   </target>
 
 </project>
