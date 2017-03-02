@@ -1,0 +1,27 @@
+<project name="lab01" default="run" basedir=".">
+  <description>
+    Advanced Programming course lab 1.
+  </description>
+
+  <property name="classes" location="classes" />
+  <property name="src" location="src" />
+
+  <target name="init">
+    <!-- create the classes dir -->
+    <mkdir dir="${classes}" />
+  </target>
+
+  <target name="clean" description="clean everything up">
+    <delete dir="${classes}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src}" destdir="${classes}" />
+  </target>
+
+  <target name="run" depends="compile">
+
+    <java classpath="${src}" classname="pt.ist.ap.labs.Main" />
+  </target>
+
+</project>
