@@ -6,7 +6,7 @@ import java.lang.Class;
 public class Main {
   public static void main(String[] args) {
     Scanner reader = new Scanner(System.in);
-    System.out.println("Enter the FqN of the class to run: ");
+    System.out.println("Enter the FQN of the class to run: ");
     String fqn = reader.next();
 
     try {
