@@ -8,8 +8,10 @@ import java.lang.annotation.Target;
 /**
  * pva.lab03.annotations.Test annotation definition.
  */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Test {
-    String[] value() default "*";
+    String SETUP_ALL = "*";
+    String[] value() default {SETUP_ALL};
 }
