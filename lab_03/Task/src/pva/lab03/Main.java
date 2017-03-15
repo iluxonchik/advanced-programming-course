@@ -11,14 +11,16 @@ public class Main {
         ArrayList<String> failedMeth = new ArrayList<>();
 
         int passed = 0, failed = 0;
-        for (Method m : Class.forName(args[0]).getMethods()) {
+        Method[] methods = Class.forName(args[0]).getDeclaredMethods();
+        for (Method m : methods) {
             if (m.isAnnotationPresent(Test.class)) {
                 try {
+                    m.setAccessible(true); // suppress Java access checking (i.e. allow invoking private methods)
                     m.invoke(null); // null: invoking a static method (on a "null" object)
                     passed++;
                     passedMeth.add(m.getName());
                 } catch (Throwable ex) {
-                    System.out.printf("Test %s failed: %s %n", m, ex.getCause());
+                    System.out.printf("Test %s failed: %s %n", m, ex.getMessage());
                     failed++;
                     failedMeth.add(m.getName());
                 }

@@ -14,7 +14,7 @@ public class Foo {
     public static void m4() { /* empty  */ }
 
     @Test public static void m5() { /* empty  */  }
-    
+
     public static void m6() { }
 
     @Test public static void m7() {

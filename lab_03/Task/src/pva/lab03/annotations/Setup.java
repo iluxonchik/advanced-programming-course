@@ -6,10 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * pva.lab03.annotations.Test annotation definition.
+ * pva.lab03.annotations.Setup annotation definition.
  */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Test {
-    String[] value() default "*";
+public @interface Setup {
+    String value();
 }
+
