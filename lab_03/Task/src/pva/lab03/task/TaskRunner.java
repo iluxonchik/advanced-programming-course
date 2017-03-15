@@ -2,8 +2,11 @@ package pva.lab03.task;
 
 import pva.lab03.annotations.Setup;
 import pva.lab03.annotations.Test;
+import sun.java2d.pipe.AAShapePipe;
 
+import javax.sound.midi.SysexMessage;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -47,6 +50,9 @@ public class TaskRunner {
         Setup setupAnnotation;
         for (Method m : methods) {
             if (m.isAnnotationPresent(Setup.class)) {
+                if (!Modifier.isStatic(m.getModifiers())) {
+                    continue;
+                }
                 m.setAccessible(true);
                 setupAnnotation = m.getAnnotation(Setup.class);
                 setupMethods.put(setupAnnotation.value(), m);
@@ -57,6 +63,9 @@ public class TaskRunner {
     private void parseTestMethods(Method[] methods) {
         for (Method m : methods) {
             if (m.isAnnotationPresent(Test.class)) {
+                if (!Modifier.isStatic(m.getModifiers())) {
+                    continue;
+                }
                 m.setAccessible(true); // suppress Java access checking (i.e. allow invoking private methods)
                 testMethods.add(m);
             }
@@ -80,7 +89,6 @@ public class TaskRunner {
                 }
                 methodList.add(setupMethods.get(setupMethodName));
             }
-
         }
     }
 
@@ -111,7 +119,7 @@ public class TaskRunner {
                 passedMeth.add(m.getName());
                 System.out.printf("%s PASSED!%n", m.getName());
             } catch (Throwable ex) {
-                System.out.printf("Test %s failed: %s %n", m, ex.getMessage());
+                System.out.printf("Test %s failed: %s %n", m, ex);
                 failed++;
                 failedMeth.add(m.getName());
             }
@@ -120,13 +128,33 @@ public class TaskRunner {
 
 
     public void run() throws Exception {
-        Method[] methods = Class.forName(testClass).getDeclaredMethods();
-        parseSetupMethods(methods);
-        parseTestMethods(methods);
-        parseTestMethodOrder();
+        ArrayList<Class> classes = getClassList();
+        for (Class c : classes) {
+            System.out.println("DBG2: Running for class " + c.getName());
+            Method[] methods = c.getDeclaredMethods();
+            parseSetupMethods(methods);
+            parseTestMethods(methods);
+            parseTestMethodOrder();
 
-        runTestMethods();
-
+            runTestMethods();
+            testMethods.clear();
+        }
         printResults();
+    }
+
+    private ArrayList<Class> getClassList() {
+        ArrayList<Class> classes = new ArrayList<>();
+        try {
+            Class c = Class.forName(testClass);
+            while (! (c.getName().equals(Object.class.getName()))) {
+                System.out.println("DBG: Adding class " + c.getName());
+                classes.add(0, c);
+                c = c.getSuperclass();
+            }
+            return classes;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return classes;
     }
 }

@@ -30,7 +30,7 @@ import pva.lab03.annotations.Test;
      Test public static void TestInheritance.m14() OK!
      Passed: 4, Failed 3
  */
-public class TestWithInheritance {
+public class TestWithInheritance extends TestWithSetup {
     @Setup("s4") protected static void s5() { System.out.println("s4"); }
 
     @Test("*") public static void m10() { System.out.println("m10"); }
